@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.com.elo7.explorandomarterest.dto.Comando;
+import br.com.elo7.explorandomarterest.dto.DestinoSonda;
 import br.com.elo7.explorandomarterest.dto.Planalto;
 import br.com.elo7.explorandomarterest.dto.Sonda;
 import br.com.elo7.explorandomarterest.exception.CamposInvalidosException;
@@ -35,19 +35,20 @@ public class ControleSondaFacade {
 //		return sonda.;
 //	}
 
-//	public String processarDados(String coordenadasPlanalto, String coordenadasSonda)
-//			throws CoordenadaForaDoEixoDoPlanaltoException, CamposInvalidosException {
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/processarDados/{planalto}/{sondas}")
-	public @ResponseBody List<Sonda> teste(@PathParam("planalto") String planalto, 
+	@Produces(MediaType.APPLICATION_JSON)
+	public @ResponseBody List<DestinoSonda> processarDados(@PathParam("planalto") String planalto, 
 											@PathParam("sondas") String sondas) throws CoordenadaForaDoEixoDoPlanaltoException, CamposInvalidosException {
+//	@RequestMapping("/processarDados/{planalto}/{sondas}")
+//	public @ResponseBody JSONObject teste(@PathVariable("planalto") String planalto, 
+//											@PathVariable("sondas") String sondas) throws CoordenadaForaDoEixoDoPlanaltoException, CamposInvalidosException {
 
 		Planalto planaltos = new Planalto(planalto);
 
 		String[] arraySonda = sondas.split("-");
 
-		List<Sonda> resposta = new ArrayList<Sonda>();
+		List<DestinoSonda> resposta = new ArrayList<DestinoSonda>();
 		
 		for (int i = 0; i < arraySonda.length; i++) {
 
@@ -56,14 +57,23 @@ public class ControleSondaFacade {
 			MovimentoSonda movimentoSonda = new MovimentoSonda();
 			movimentoSonda.executarInstrucao(sonda);
 
-			sonda.setNomeSonda("Sonda " + i);
-			resposta.add(sonda);
-			processarSaida(sonda);
+//			sonda.setNomeSonda("Sonda " + i);
+//			json.toJSONArray(resposta);
+			DestinoSonda destinoSonda = new DestinoSonda();
+			destinoSonda.setCoordenadaX(sonda.getCoordenadaX());
+			destinoSonda.setCoordenadaY(sonda.getCoordenadaY());
+			destinoSonda.setDirecaoAtual(sonda.getDirecaoAtual());
+			
+			resposta.add(destinoSonda);
+//			processarSaida(sonda);
 
 			++i;
 		}
 
+//		JSONObject json = new JSONObject();
+//		json.wrap(resposta);
 		return resposta;
+//		return json;
 	}
 
 	public String processarSaida(Sonda sonda) {

@@ -1,5 +1,6 @@
 package br.com.elo7.explorandomarterest.dto;
 
+//@XmlRootElement
 public class Sonda {
 
 	Planalto planalto;
@@ -8,7 +9,6 @@ public class Sonda {
 	private int coordenadaY;
 	private char direcaoCardinalInicial;
 	private String instrucaoMovimentos;
-	private String nomeSonda;
 	
 	// Variáveis de controle
 	private char direcaoAnterior = ' ';
@@ -84,11 +84,4 @@ public class Sonda {
 		return quantidadeSondas;
 	}
 
-	public String getNomeSonda() {
-		return nomeSonda;
-	}
-
-	public void setNomeSonda(String nomeSonda) {
-		this.nomeSonda = nomeSonda;
-	}
 }

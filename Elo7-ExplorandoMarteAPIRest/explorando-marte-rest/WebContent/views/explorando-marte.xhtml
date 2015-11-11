@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+<head>
+<title>Insert title here</title>
+</head>
+<body>
+	<f:view>
+		<h:form>
+			<h:outputLabel value="Coordenadas do Planalto" />
+			<br />
+			<h:inputText value="#{explorandoMarteBBean.planalto}" />
+			<br />
+			<br />
+			<h:outputLabel value="Coordenadas das Sondas" />
+			<br />
+			<h:inputTextarea style="height: 170px;"
+				value="#{explorandoMarteBBean.sondas}" />
+			<br />
+			<br />
+			<h:commandButton value="Executar"
+				actionListener="#{explorandoMarteBBean.executarProcessaDados}" />
+		</h:form>
+	</f:view>
+</body>
+</html>

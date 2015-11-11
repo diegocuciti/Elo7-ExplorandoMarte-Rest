@@ -1,56 +1,69 @@
 package br.com.elo7.explorandomarterest.controller;
 
-import javax.ws.rs.Consumes;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import br.com.elo7.explorandomarterest.dto.Comando;
 import br.com.elo7.explorandomarterest.dto.Planalto;
 import br.com.elo7.explorandomarterest.dto.Sonda;
 import br.com.elo7.explorandomarterest.exception.CamposInvalidosException;
 import br.com.elo7.explorandomarterest.exception.CoordenadaForaDoEixoDoPlanaltoException;
 import br.com.elo7.explorandomarterest.movimento.MovimentoSonda;
 
-@Path("/controlesonda/testes")
+//@Controller
+@Path("/controlesonda")
 public class ControleSondaFacade {
 
 	StringBuilder coordenadaDestino = new StringBuilder();
 	
 	Sonda sonda;
 	
+//	@GET
+//	@Produces(MediaType.APPLICATION_JSON)
+//	@Path("/{planalto}/{sondas}/{instrucao}")
+//	public Sonda teste(@PathParam("planalto") String planalto, 
+//						@PathParam("sondas") String sondas,
+//						@PathParam("instrucao") String instrucao) {
+//		return sonda.;
+//	}
+
+//	public String processarDados(String coordenadasPlanalto, String coordenadasSonda)
+//			throws CoordenadaForaDoEixoDoPlanaltoException, CamposInvalidosException {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{nome}")
-	public String teste(@PathParam("nome") String nome) {
-		return "Olá: " + nome;
-	}
+	@Path("/processarDados/{planalto}/{sondas}")
+	public @ResponseBody List<Sonda> teste(@PathParam("planalto") String planalto, 
+											@PathParam("sondas") String sondas) throws CoordenadaForaDoEixoDoPlanaltoException, CamposInvalidosException {
 
-	@GET
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/processarDados")
-	public String processarDados(String coordenadasPlanalto, String coordenadasSonda)
-			throws CoordenadaForaDoEixoDoPlanaltoException, CamposInvalidosException {
+		Planalto planaltos = new Planalto(planalto);
 
-		Planalto planalto = new Planalto(coordenadasPlanalto);
+		String[] arraySonda = sondas.split("-");
 
-		String[] arraySonda = coordenadasSonda.split("\r\n");
-
+		List<Sonda> resposta = new ArrayList<Sonda>();
+		
 		for (int i = 0; i < arraySonda.length; i++) {
 
-			sonda = new Sonda(planalto, arraySonda[i], arraySonda[i + 1].replace(" ", ""));
+			Sonda sonda = new Sonda(planaltos, arraySonda[i], arraySonda[i+1].replace(" ", ""));
 
 			MovimentoSonda movimentoSonda = new MovimentoSonda();
 			movimentoSonda.executarInstrucao(sonda);
 
+			sonda.setNomeSonda("Sonda " + i);
+			resposta.add(sonda);
 			processarSaida(sonda);
 
 			++i;
 		}
 
-		return String.valueOf(getCoordenadaDestino());
+		return resposta;
 	}
 
 	public String processarSaida(Sonda sonda) {

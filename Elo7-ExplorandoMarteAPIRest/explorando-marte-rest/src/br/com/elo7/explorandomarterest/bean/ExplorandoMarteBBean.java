@@ -12,7 +12,7 @@ import br.com.elo7.explorandomarterest.exception.CoordenadaForaDoEixoDoPlanaltoE
 @ManagedBean
 public class ExplorandoMarteBBean {
 
-	private static final String SERVER_URI = "http://localhost:8080/explorando-marte-rest/ws/controlesonda/processarDados";
+	private static final String SERVER_URI = "http://localhost:8080/explorando-marte-rest/ws/controlesonda/processarDados/5 5/1 2 N/LMLMLMLMM";
 	String planalto;
 	String sondas;
 	
@@ -28,7 +28,7 @@ public class ExplorandoMarteBBean {
 	    Client c = Client.create();
 	   
 	    WebResource wr = c.resource(SERVER_URI);
-//	    wr.
+//	    wr.p
 	    return wr.get(String.class);
 	    
 		//String response = restTemplate.postForObject(SERVER_URI, String.class,String.class, planalto,sondas);

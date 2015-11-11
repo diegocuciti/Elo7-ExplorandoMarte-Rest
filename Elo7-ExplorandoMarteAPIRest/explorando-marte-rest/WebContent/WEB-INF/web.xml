@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	id="WebApp_ID" version="3.0">
 	<display-name>explorando-marte-rest</display-name>
-<!--  
+<!-- 
 	<welcome-file-list>
 		<welcome-file>views/explorando-marte.jsf</welcome-file>
 	</welcome-file-list>
@@ -41,7 +41,6 @@
 
 	  <servlet-mapping>
 		<servlet-name>jersey-serlvet</servlet-name>
-	<!--	<url-pattern>/*</url-pattern>-->
 		<url-pattern>/ws/*</url-pattern>
 	  </servlet-mapping>
   

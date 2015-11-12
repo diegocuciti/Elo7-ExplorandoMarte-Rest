@@ -3,30 +3,30 @@ package br.com.elo7.explorandomarterest.dto;
 public class Sonda {
 
 	Planalto planalto;
-	
+
 	private int coordenadaX;
 	private int coordenadaY;
 	private char direcaoCardinalInicial;
 	private String instrucaoMovimentos;
-	
+
 	// Variáveis de controle
 	private char direcaoAnterior = ' ';
 	private char direcaoAtual = ' ';
 	private char movimentoAtual = ' ';
 	public static int quantidadeSondas = 0;
 
-	public Sonda(Planalto planalto, String coordenadasSonda, String instrucaoMovimentos){
+	public Sonda(Planalto planalto, String coordenadasSonda, String instrucaoMovimentos) {
 		String[] coordenadas = coordenadasSonda.split("\\s");
-		
+
 		this.planalto = planalto;
 		this.coordenadaX = (Integer.valueOf(coordenadas[0]));
-		this.coordenadaY = (Integer.valueOf(coordenadas[1])); 
+		this.coordenadaY = (Integer.valueOf(coordenadas[1]));
 		this.direcaoCardinalInicial = coordenadas[2].toUpperCase().charAt(0);
 		this.instrucaoMovimentos = instrucaoMovimentos.toUpperCase();
-		
+
 		quantidadeSondas++;
 	}
-	
+
 	public Planalto getPlanalto() {
 		return planalto;
 	}
@@ -46,7 +46,7 @@ public class Sonda {
 	public void setCoordenadaY(int coordenadaY) {
 		this.coordenadaY = coordenadaY;
 	}
-	
+
 	public char getDirecaoCardinalInicial() {
 		return direcaoCardinalInicial;
 	}

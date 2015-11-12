@@ -1,76 +1,91 @@
 package br.com.elo7.explorandomarterest.enums;
 
-import br.com.elo7.explorandomarterest.dto.Sonda;
-import br.com.elo7.explorandomarterest.enums.DirecaoCardinal;
-import br.com.elo7.explorandomarterest.enums.InstrucaoMovimento;
-import br.com.elo7.explorandomarterest.interfaces.DirecaoCardinalSonda;
+import java.util.Arrays;
 
-public enum DirecaoCardinal implements DirecaoCardinalSonda {
-	
+import br.com.elo7.explorandomarterest.dto.Sonda;
+import br.com.elo7.explorandomarterest.exception.CamposInvalidosException;
+
+public enum DirecaoCardinal {
+
 	NORTH('N') {
 		@Override
-		public void alterarCoordenadas(Sonda coordenadasY) {
-			coordenadasY.setCoordenadaY(coordenadasY.getCoordenadaY() + 1);
+		public void alterarCoordenadas(Sonda sonda) {
+			sonda.setCoordenadaY(sonda.getCoordenadaY() + 1);
 		}
 
 		@Override
-		public void recuperarDirecaoAtual(Sonda coordenadas) {
-			if (coordenadas.getMovimentoAtual() == InstrucaoMovimento.LEFT.getValor())
-				coordenadas.setDirecaoAtual(DirecaoCardinal.WEST.codigoDirecaoCardinal);
-			else 
-				coordenadas.setDirecaoAtual(DirecaoCardinal.EAST.codigoDirecaoCardinal);
+		public void recuperarDirecaoAtual(Sonda sonda) {
+			if (sonda.getMovimentoAtual() == InstrucaoMovimento.LEFT.getValor())
+				sonda.setDirecaoAtual(DirecaoCardinal.WEST.codigoDirecaoCardinal);
+			else
+				sonda.setDirecaoAtual(DirecaoCardinal.EAST.codigoDirecaoCardinal);
 		}
 	},
-	
+
 	SOUTH('S') {
 		@Override
-		public void alterarCoordenadas(Sonda coordenadasY) {
-			coordenadasY.setCoordenadaY(coordenadasY.getCoordenadaY() - 1);
+		public void alterarCoordenadas(Sonda sonda) {
+			sonda.setCoordenadaY(sonda.getCoordenadaY() - 1);
 		}
-		
+
 		@Override
-		public void recuperarDirecaoAtual(Sonda coordenadas) {
-			if (coordenadas.getMovimentoAtual() == InstrucaoMovimento.LEFT.getValor())
-				coordenadas.setDirecaoAtual(DirecaoCardinal.EAST.codigoDirecaoCardinal);
-			else 
-				coordenadas.setDirecaoAtual(DirecaoCardinal.WEST.codigoDirecaoCardinal);
+		public void recuperarDirecaoAtual(Sonda sonda) {
+			if (sonda.getMovimentoAtual() == InstrucaoMovimento.LEFT.getValor())
+				sonda.setDirecaoAtual(DirecaoCardinal.EAST.codigoDirecaoCardinal);
+			else
+				sonda.setDirecaoAtual(DirecaoCardinal.WEST.codigoDirecaoCardinal);
 		}
 	},
-	
+
 	EAST('E') {
 		@Override
-		public void alterarCoordenadas(Sonda coordenadasX) {
-			coordenadasX.setCoordenadaX(coordenadasX.getCoordenadaX() + 1);
+		public void alterarCoordenadas(Sonda sonda) {
+			sonda.setCoordenadaX(sonda.getCoordenadaX() + 1);
 		}
-		
+
 		@Override
-		public void recuperarDirecaoAtual(Sonda coordenadas) {
-			if (coordenadas.getMovimentoAtual() == InstrucaoMovimento.LEFT.getValor())
-				coordenadas.setDirecaoAtual(DirecaoCardinal.NORTH.codigoDirecaoCardinal);
-			else 
-				coordenadas.setDirecaoAtual(DirecaoCardinal.SOUTH.codigoDirecaoCardinal);
+		public void recuperarDirecaoAtual(Sonda sonda) {
+			if (sonda.getMovimentoAtual() == InstrucaoMovimento.LEFT.getValor())
+				sonda.setDirecaoAtual(DirecaoCardinal.NORTH.codigoDirecaoCardinal);
+			else
+				sonda.setDirecaoAtual(DirecaoCardinal.SOUTH.codigoDirecaoCardinal);
 		}
 	},
-	
+
 	WEST('W') {
 		@Override
-		public void alterarCoordenadas(Sonda coordenadasX) {
-			coordenadasX.setCoordenadaX(coordenadasX.getCoordenadaX() - 1);
+		public void alterarCoordenadas(Sonda sonda) {
+			sonda.setCoordenadaX(sonda.getCoordenadaX() - 1);
 		}
-	
+
 		@Override
-		public void recuperarDirecaoAtual(Sonda coordenadas) {
-			if (coordenadas.getMovimentoAtual() == InstrucaoMovimento.LEFT.getValor())
-				coordenadas.setDirecaoAtual(DirecaoCardinal.SOUTH.codigoDirecaoCardinal);
-			else 
-				coordenadas.setDirecaoAtual(DirecaoCardinal.NORTH.codigoDirecaoCardinal);
+		public void recuperarDirecaoAtual(Sonda sonda) {
+			if (sonda.getMovimentoAtual() == InstrucaoMovimento.LEFT.getValor())
+				sonda.setDirecaoAtual(DirecaoCardinal.SOUTH.codigoDirecaoCardinal);
+			else
+				sonda.setDirecaoAtual(DirecaoCardinal.NORTH.codigoDirecaoCardinal);
 		}
 	};
 
 	private char codigoDirecaoCardinal;
-	
+
 	private DirecaoCardinal(char direcaoCardinal) {
 		this.codigoDirecaoCardinal = direcaoCardinal;
+	}
+
+	public abstract void alterarCoordenadas(Sonda sonda);
+
+	public abstract void recuperarDirecaoAtual(Sonda sonda);
+
+	public static DirecaoCardinal find(char direcao) throws CamposInvalidosException {
+
+		for (DirecaoCardinal direcaoCardinal : DirecaoCardinal.values())
+
+			if (Arrays.asList(direcaoCardinal.getCodigoDirecaoCardinal()).contains(direcao))
+				return direcaoCardinal;
+
+		throw new CamposInvalidosException();
+
 	}
 
 	public char getCodigoDirecaoCardinal() {

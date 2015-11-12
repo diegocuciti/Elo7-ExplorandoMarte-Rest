@@ -1,7 +1,7 @@
 package br.com.elo7.explorandomarterest.dto;
 
 public class Planalto {
-	
+
 	private int coordenadaPontoInferiorX = 0;
 	private int coordenadaPontoInferiorY = 0;
 	private int coordenadaPontoSuperiorX;

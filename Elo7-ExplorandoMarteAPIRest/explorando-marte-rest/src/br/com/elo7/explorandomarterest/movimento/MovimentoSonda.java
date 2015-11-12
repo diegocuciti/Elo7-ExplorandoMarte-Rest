@@ -8,8 +8,6 @@ import br.com.elo7.explorandomarterest.exception.CoordenadaForaDoEixoDoPlanaltoE
 
 public class MovimentoSonda {
 
-	boolean cancelarInstrucao;
-
 	public Sonda executarInstrucao(Sonda sonda)
 			throws CoordenadaForaDoEixoDoPlanaltoException, CamposInvalidosException {
 
@@ -44,26 +42,10 @@ public class MovimentoSonda {
 	// Realizar manutenção nas coordenadas X-Y da sonda
 	public Sonda atribuirCoordenadasSonda(Sonda sonda) throws CamposInvalidosException {
 
-		switch (sonda.getDirecaoAtual()) {
-		case 'N':
-			DirecaoCardinal.NORTH.alterarCoordenadas(sonda);
-			break;
-
-		case 'S':
-			DirecaoCardinal.SOUTH.alterarCoordenadas(sonda);
-			break;
-
-		case 'E':
-			DirecaoCardinal.EAST.alterarCoordenadas(sonda);
-			break;
-
-		case 'W':
-			DirecaoCardinal.WEST.alterarCoordenadas(sonda);
-			break;
-
-		default:
-			throw new CamposInvalidosException(
-					"Sonda " + sonda.getQuantidadeSondas() + " possui Direção Cardinal inválida.");
+		try {
+			DirecaoCardinal.find(sonda.getDirecaoAtual()).alterarCoordenadas(sonda);
+		} catch (CamposInvalidosException e) {
+			throw new CamposInvalidosException("Sonda possui Direção Cardinal inválida.");
 		}
 		return sonda;
 	}
@@ -71,26 +53,10 @@ public class MovimentoSonda {
 	// Buscar a direção atual, através do movimento de instrução atual
 	public Sonda buscarDirecaoAtual(Sonda sonda) throws CamposInvalidosException {
 
-		switch (sonda.getDirecaoAnterior()) {
-		case 'N':
-			DirecaoCardinal.NORTH.recuperarDirecaoAtual(sonda);
-			break;
-
-		case 'S':
-			DirecaoCardinal.SOUTH.recuperarDirecaoAtual(sonda);
-			break;
-
-		case 'E':
-			DirecaoCardinal.EAST.recuperarDirecaoAtual(sonda);
-			break;
-
-		case 'W':
-			DirecaoCardinal.WEST.recuperarDirecaoAtual(sonda);
-			break;
-
-		default:
-			throw new CamposInvalidosException(
-					"Sonda " + sonda.getQuantidadeSondas() + " possui Direção Cardinal inválida.");
+		try {
+			DirecaoCardinal.find(sonda.getDirecaoAnterior()).recuperarDirecaoAtual(sonda);
+		} catch (CamposInvalidosException e) {
+			throw new CamposInvalidosException("Sonda possui Direção Cardinal inválida.");
 		}
 		return sonda;
 	}
@@ -100,41 +66,17 @@ public class MovimentoSonda {
 	// superior-direito do planalto
 	public void validarEixoCoordenadasSondaPlanalto(Sonda sonda) throws CoordenadaForaDoEixoDoPlanaltoException {
 
-		validarCoordenadasX(sonda);
-
-		if (isCancelarInstrucao()) {
+		if ((sonda.getCoordenadaX() < sonda.getPlanalto().getCoordenadaPontoInferiorX())
+				|| (sonda.getCoordenadaX() > sonda.getPlanalto().getCoordenadaPontoSuperiorX()))
 			tratarMensagemErro('X', sonda);
-		} else {
-			validarCoordenadasY(sonda);
-
-			if (isCancelarInstrucao()) {
-				tratarMensagemErro('Y', sonda);
-			}
-		}
-	}
-
-	public void validarCoordenadasX(Sonda coordenadaX) {
-
-		if ((coordenadaX.getCoordenadaX() < coordenadaX.getPlanalto().getCoordenadaPontoInferiorX())
-				|| (coordenadaX.getCoordenadaX() > coordenadaX.getPlanalto().getCoordenadaPontoSuperiorX()))
-			this.setCancelarInstrucao(true);
-		else
-			this.setCancelarInstrucao(false);
-	}
-
-	public void validarCoordenadasY(Sonda coordenadaY) {
-
-		if ((coordenadaY.getCoordenadaY() < coordenadaY.getPlanalto().getCoordenadaPontoInferiorY())
-				|| (coordenadaY.getCoordenadaY() > coordenadaY.getPlanalto().getCoordenadaPontoSuperiorY()))
-			this.setCancelarInstrucao(true);
-		else
-			this.setCancelarInstrucao(false);
+		else if ((sonda.getCoordenadaY() < sonda.getPlanalto().getCoordenadaPontoInferiorY())
+				|| (sonda.getCoordenadaY() > sonda.getPlanalto().getCoordenadaPontoSuperiorY()))
+			tratarMensagemErro('Y', sonda);
 	}
 
 	public void tratarMensagemErro(char coordenada, Sonda sonda) throws CoordenadaForaDoEixoDoPlanaltoException {
-		throw new CoordenadaForaDoEixoDoPlanaltoException("Sonda " + sonda.getQuantidadeSondas()
-				+ " estourou o limite do eixo " + coordenada
-				+ " do planalto e não foi processada por completo. \nAs próximas sondas não seram processadas!");
+		throw new CoordenadaForaDoEixoDoPlanaltoException("Sonda estourou o limite do eixo " + coordenada
+				+ " do planalto e não foi processada por completo. As próximas sondas não seram processadas!");
 	}
 
 	public void validarMovimentoAtual(int i, Sonda sonda) throws CamposInvalidosException {
@@ -143,17 +85,8 @@ public class MovimentoSonda {
 		if ((sonda.getMovimentoAtual() != InstrucaoMovimento.MOVE.getValor())
 				&& (sonda.getMovimentoAtual() != InstrucaoMovimento.LEFT.getValor())
 				&& (sonda.getMovimentoAtual() != InstrucaoMovimento.RIGHT.getValor())) {
-			throw new CamposInvalidosException("Sonda " + sonda.getQuantidadeSondas()
-					+ " possui instrução de movimento inválida. Movimento de instrução: " + sonda.getMovimentoAtual()
-					+ " é uma instrução inválida. \nInstruções válidas: L R M ");
+			throw new CamposInvalidosException("Sonda possui instrução de movimento inválida. Movimento de instrução: "
+					+ sonda.getMovimentoAtual() + " é uma instrução inválida. Instruções válidas: L R M ");
 		}
-	}
-
-	public boolean isCancelarInstrucao() {
-		return cancelarInstrucao;
-	}
-
-	public void setCancelarInstrucao(boolean cancelarInstrucao) {
-		this.cancelarInstrucao = cancelarInstrucao;
 	}
 }

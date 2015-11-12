@@ -32,22 +32,6 @@ import br.com.elo7.explorandomarterest.movimento.MovimentoSonda;
 @Path("/controlesonda")
 public class ControleSondaWebService {
 
-	// @GET
-	// @Path("/processarDados/{planalto}/{sondas}")
-	// @Produces(MediaType.APPLICATION_JSON)
-	// public @ResponseBody List<DestinoSonda>
-	// processarDados(@PathParam("planalto") String planalto,
-	// @PathParam("sondas") String sondas) throws
-	// CoordenadaForaDoEixoDoPlanaltoException, CamposInvalidosException {
-
-	// @GET
-	// @Path("/processarDados")
-	// @Produces(MediaType.APPLICATION_JSON)
-	// public @ResponseBody List<DestinoSonda>
-	// processarDados(@QueryParam("planalto") String planalto,
-	// @QueryParam("sondas") String sondas) throws
-	// CoordenadaForaDoEixoDoPlanaltoException, CamposInvalidosException {
-
 	@GET
 	@Path("/processarDados")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -80,7 +64,6 @@ public class ControleSondaWebService {
 
 			++i;
 		}
-
 		return resposta;
 	}
 }

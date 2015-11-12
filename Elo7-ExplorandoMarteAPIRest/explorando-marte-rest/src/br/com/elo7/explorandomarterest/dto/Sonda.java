@@ -1,6 +1,5 @@
 package br.com.elo7.explorandomarterest.dto;
 
-//@XmlRootElement
 public class Sonda {
 
 	Planalto planalto;
@@ -83,5 +82,4 @@ public class Sonda {
 	public int getQuantidadeSondas() {
 		return quantidadeSondas;
 	}
-
 }
